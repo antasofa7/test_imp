@@ -5,12 +5,16 @@ class InputField extends StatefulWidget {
   final TextInputType inputType;
   final bool obsecureText = false;
   final bool suffixIcon;
+  final TextEditingController controller;
+  final String helperText;
 
   const InputField(
       {super.key,
       required this.label,
       required this.inputType,
-      required this.suffixIcon});
+      required this.suffixIcon,
+      required this.controller,
+      required this.helperText});
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -31,6 +35,13 @@ class _InputFieldState extends State<InputField> {
               keyboardType: widget.inputType,
               obscureText: _obsecureText,
               obscuringCharacter: '*',
+              controller: widget.controller,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '${widget.label} tidak boleh kosong!';
+                }
+                return null;
+              },
               style: Theme.of(context).textTheme.bodyMedium,
               cursorHeight: 24.0,
               decoration: InputDecoration(
@@ -41,6 +52,8 @@ class _InputFieldState extends State<InputField> {
                   labelStyle: Theme.of(context).textTheme.labelLarge,
                   floatingLabelAlignment: FloatingLabelAlignment.start,
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
+                  helperText: widget.helperText,
+                  helperStyle: Theme.of(context).textTheme.labelSmall,
                   suffixIcon: IconButton(
                       onPressed: () {
                         setState(() {
@@ -53,7 +66,13 @@ class _InputFieldState extends State<InputField> {
             )
           : TextFormField(
               keyboardType: widget.inputType,
-              autofocus: true,
+              controller: widget.controller,
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return '${widget.label} tidak boleh kosong!';
+                }
+                return null;
+              },
               style: Theme.of(context).textTheme.bodyMedium,
               cursorHeight: 24.0,
               decoration: InputDecoration(
@@ -64,6 +83,8 @@ class _InputFieldState extends State<InputField> {
                 labelStyle: Theme.of(context).textTheme.labelLarge,
                 floatingLabelAlignment: FloatingLabelAlignment.start,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
+                helperText: widget.helperText,
+                helperStyle: Theme.of(context).textTheme.labelSmall,
               )),
     );
   }
