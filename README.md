@@ -1,6 +1,6 @@
 # my_apps
 
-A new Flutter project.
+A new Flutter project to complete a test at PT Informatika Media Pratama as a Mobile Apps Developer. in the project there is a login and CRUD process to display the FAQ data list, add, change and delete data.
 
 ## Getting Started
 
