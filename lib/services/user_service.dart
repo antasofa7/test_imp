@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:my_apps/models/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
@@ -5,23 +8,23 @@ class UserService {
 
   static const String localUserData = 'LOCAL_USER_DATA';
 
-  Future<void> setLocalUser(String value) async {
+  static Future<void> setLocalUser(String value) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString(localUserData, value);
   }
 
-  Future<String> getLocalUser() async {
+  static Future<UserModel> getLocalUser() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(localUserData) ?? '';
+    return UserModel.fromJson(jsonDecode(prefs.getString(localUserData) ?? ''));
   }
 
-  Future<bool?> checkLogin() async {
+  static Future<bool?> checkLogin() async {
     final prefs = await SharedPreferences.getInstance();
     var user = prefs.containsKey(localUserData);
     return user;
   }
 
-  Future<void> removeLocalUser() async {
+  static Future<void> removeLocalUser() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(localUserData);
   }

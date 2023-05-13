@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:my_apps/cubit/articles_cubit.dart';
 import 'package:my_apps/cubit/auth_cubit.dart';
-import 'package:my_apps/pages/dashboard.dart';
+import 'package:my_apps/cubit/create_faq_cubit.dart';
+import 'package:my_apps/cubit/delete_faq_cubit.dart';
+import 'package:my_apps/cubit/faq_detail_cubit.dart';
+import 'package:my_apps/cubit/list_faq_cubit.dart';
+import 'package:my_apps/cubit/update_faq_cubit.dart';
+import 'package:my_apps/pages/home_page.dart';
 import 'package:my_apps/pages/login_page.dart';
 import 'package:my_apps/theme.dart';
 
@@ -18,14 +21,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    initializeDateFormatting('id_ID', null);
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => AuthCubit(),
         ),
         BlocProvider(
-          create: (context) => ArticlesCubit(),
+          create: (context) => ListFaqCubit(),
+        ),
+        BlocProvider(
+          create: (context) => CreateFaqCubit(),
+        ),
+        BlocProvider(
+          create: (context) => FaqDetailCubit(),
+        ),
+        BlocProvider(
+          create: (context) => UpdateFaqCubit(),
+        ),
+        BlocProvider(
+          create: (context) => DeleteFaqCubit(),
         )
       ],
       child: MaterialApp(
@@ -34,7 +48,7 @@ class MyApp extends StatelessWidget {
         initialRoute: LoginPage.routeName,
         routes: {
           LoginPage.routeName: (context) => const LoginPage(),
-          Dashboard.routeName: (context) => const Dashboard()
+          HomePage.routeName: (context) => const HomePage()
         },
       ),
     );

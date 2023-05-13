@@ -24,7 +24,7 @@ final themeData = ThemeData(
         secondary: secondaryColor,
         background: neutral100,
         onPrimaryContainer: neutral900,
-        outline: neutral900,
+        outline: neutral300,
         error: danger),
     textTheme: const TextTheme(
       headlineLarge:
@@ -40,7 +40,7 @@ final themeData = ThemeData(
       labelLarge: TextStyle(
           fontFamily: 'Inter', fontWeight: medium, color: primaryColor),
       labelMedium: TextStyle(
-          fontFamily: 'Inter', fontWeight: regular, color: primaryColor),
+          fontFamily: 'Inter', fontWeight: regular, color: neutral900),
       labelSmall:
           TextStyle(fontFamily: 'Inter', fontWeight: regular, color: danger),
     ));

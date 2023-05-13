@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:my_apps/cubit/auth_cubit.dart';
-import 'package:my_apps/pages/dashboard.dart';
+import 'package:my_apps/pages/home_page.dart';
 import 'package:my_apps/services/user_service.dart';
 import 'package:my_apps/widgets/button.dart';
 import 'package:my_apps/widgets/input_field.dart';
@@ -18,26 +19,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormBuilderState>();
+  final _emailFieldKey = GlobalKey<FormBuilderFieldState>();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  String _emailHelperText = '';
-  String _passwordHelperText = '';
 
   @override
   void initState() {
     Timer(
       const Duration(milliseconds: 1500),
       () async {
-        bool? isUserExist = await UserService().checkLogin();
+        bool? isUserExist = await UserService.checkLogin();
         if (isUserExist!) {
           if (!mounted) return;
           context.read<AuthCubit>().getCurrentUser();
           Navigator.pushNamedAndRemoveUntil(
             context,
-            Dashboard.routeName,
+            HomePage.routeName,
             (route) => false,
           );
         }
@@ -54,24 +53,9 @@ class _LoginPageState extends State<LoginPage> {
           if (state is AuthSuccess) {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              Dashboard.routeName,
+              HomePage.routeName,
               (route) => false,
             );
-          } else if (state is AuthErrors) {
-            var error = state.errors.errors;
-            if (error.email.isNotEmpty) {
-              _emailHelperText = error.email[0].toString();
-            }
-            if (error.password.isNotEmpty) {
-              _passwordHelperText = error.password[0].toString();
-            }
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                state.errors.message,
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ));
           } else if (state is AuthFailed) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
@@ -120,16 +104,15 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(
                       height: 16.0,
                     ),
-                    Form(
+                    FormBuilder(
                         key: _formKey,
                         child: Column(
                           children: [
                             InputField(
+                              key: _emailFieldKey,
                               label: 'Email address',
                               inputType: TextInputType.emailAddress,
-                              suffixIcon: false,
                               controller: _emailController,
-                              helperText: _emailHelperText,
                             ),
                             const SizedBox(
                               height: 16.0,
@@ -139,7 +122,6 @@ class _LoginPageState extends State<LoginPage> {
                               inputType: TextInputType.visiblePassword,
                               suffixIcon: true,
                               controller: _passwordController,
-                              helperText: _passwordHelperText,
                             ),
                             const SizedBox(
                               height: 40.0,
@@ -147,10 +129,18 @@ class _LoginPageState extends State<LoginPage> {
                             ButtonWidget(
                                 label: 'LOGIN',
                                 onPress: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    context.read<AuthCubit>().login(
-                                        email: _emailController.text,
-                                        password: _passwordController.text);
+                                  if (_formKey.currentState
+                                          ?.saveAndValidate() ??
+                                      false) {
+                                    if (true) {
+                                      // Either invalidate using Form Key
+                                      _formKey.currentState?.fields['email']
+                                          ?.invalidate('Email already taken.');
+
+                                      context.read<AuthCubit>().login(
+                                          email: _emailController.text,
+                                          password: _passwordController.text);
+                                    }
                                   }
                                 })
                           ],
