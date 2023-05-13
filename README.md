@@ -6,8 +6,8 @@ A new Flutter project to complete a test at PT Informatika Media Pratama as a Mo
 
 ### Make sure you have configured the webdev tool.
 
-With the Flutter SDK installed.
-With the Dart SDK installed.
++ With the Flutter SDK installed.
++ With the Dart SDK installed.
 Go into one of the sample directories, get packages, and run.
 ```
 $ cd [project]
